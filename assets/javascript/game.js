@@ -9,14 +9,18 @@ var objGame = {
     arrWordList : ["bandersnatch", "giggledick"],
     //use a random function to select a word 
     get strWordChoice(){
-        return this.arrWordList[Math.floor(Math.random() * this.arrWordList.length)];
+        if (!this._wordChoice){
+            this._wordChoice = this.arrWordList[Math.floor(Math.random() * this.arrWordList.length)];
+        }
+        return this._wordChoice
     },
+    _wordChoice : "",
     //object of letters in selected work and their positions
     // supports multiple instances of same letter in a word
     objKeysToMatch : {},
     //function that populates the objKeysToMach object
     addKeysToMatch : function () {
-        choice = this.strWordChoice;
+         var choice = this.strWordChoice;
         for (i = 0; i < choice.length; i++) {
             var strLetter = choice[i];
             if (this.objKeysToMatch[strLetter]) {
@@ -28,7 +32,7 @@ var objGame = {
         }
     },
     //TODO:REMOVE TEST LIST FROM list of keys played
-    arrKeysPlayed : ["t","m","s","a"],
+    arrKeysPlayed : [],
     //TODO:This will need to pickup the value of the event.key
     strSelectedKey : "",
     //TODO:boolKeyValidator needs code to examine key against valid keys. Look to regex for assitance
@@ -36,15 +40,17 @@ var objGame = {
     intMatches : 0,
     // TODO:change this to account for duplicate keys in word using arrKeysToMatch.length
     get intMatchWin() {
-        return Object.keys(this.arrKeysToMatch).length;
+        return Object.keys(this.objKeysToMatch).length;
     },
     //list of keys played that do not match the word.
     arrNegMatches : [],
     //number of missed selections before game ends with loss
     intMatchLose : 6,
+    intWin : 0,
+    intLost :0,
     //function that plays each selected letter against the chosen word.
     playTheKey : function(){
-        if(this.arrKeysPlayed.indexOf(this.strSelectedKey)){
+        if(this.arrKeysPlayed.indexOf(this.strSelectedKey) != -1){
                 //TODO:code for actions if selected key already played.
                 alert("Letter already played. Play another letter.");
                 return;
@@ -55,9 +61,10 @@ var objGame = {
                 //create intMatches
                 this.intMatches++
                 //TODO: add code to position keys onto playboard
-                this.placeKeyMatch(this.strSelectredKey);
+                this.placeKeyMatch(this.strSelectedKey);
                 if (this.intMatches === this.intMatchWin) {
                     //TODO: code to indicate win to player and end game
+                    this.endGame(true);
                 }
             }
             else {
@@ -67,13 +74,14 @@ var objGame = {
                 this.hangTheMan();
                 if (this.arrNegMatches.length === this.intMatchLose) {
                     //code to indicate loss and end game.
+                    this.endGame(false);
                 }
             }        
         showPlayedKeys();
         }
     },
     setPlaceholders :  function(){
-        for (i=0; i<Object.keys(this.objKeysToMatch).length;i++){
+        for (i=0; i<this.strWordChoice.length;i++){
             var newLi = document.createElement("li");
             var placeholder = document.createTextNode("__");
             newLi.appendChild(placeholder);
@@ -83,17 +91,17 @@ var objGame = {
         }
     },
     placeKeyMatch : function(strKeyMatch){
-        let arrPositions = this.objKeysToMatch[strKeyMatch];
-        for(i=0;i<arrPositions.length;i++){
+        let arrPosition = this.objKeysToMatch[strKeyMatch];
+        for(i=0;i<arrPosition.length;i++){
             let strKeyPos = arrPosition[i];
             let eleLi = document.querySelector("#li" + strKeyPos );
             let eleTxtNode = document.createTextNode(strKeyMatch);
-            eleLi.appendChild(eleTxtNode);
+            eleLi.textContent=(strKeyMatch);
         }
 
     },
     hangTheMan : function(){
-        var hangLevel = this.arrNegMatches.length + 1;
+        var hangLevel = this.arrNegMatches.length;
         var hangProg = document.querySelector("#hangProgression");
         hangProg.setAttribute("src","assets/images/Hangman-" + hangLevel + ".png");
 
@@ -102,11 +110,21 @@ var objGame = {
     },
     showPlayedKeys : function(){
         var playedKeys = this.arrKeysPlayed.sort();
-        var keyList = ""
-        for(i=0;i<playedKeys;i++){
-            keyList + playedKeys[i] + " ,"
+        var keyList = "";
+        for(i=0;i<playedKeys.length;i++){
+            keyList += playedKeys[i] + ", ";
         }
         keyList = keyList.substr(0,keyList.length - 2);
         document.querySelector("#letterList").textContent = keyList;
-    }
+    },
+    endGame : function(win){
+        if(win){
+            this.intWon++
+            alert("WIN");
+        }
+        else{
+            this.intLost++
+            alert("LOSE");
+        }
+    },
 }
