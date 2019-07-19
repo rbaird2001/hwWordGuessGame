@@ -27,11 +27,11 @@ var objGame = {
             }
         }
     },
-    //list of keys played
-    arrKeysPlayed : [],
-    //This will need to pickup the value of the event.key
+    //TODO:REMOVE TEST LIST FROM list of keys played
+    arrKeysPlayed : ["t","m","s","a"],
+    //TODO:This will need to pickup the value of the event.key
     strSelectedKey : "",
-    //boolKeyValidator needs code to examine key against valid keys. Look to regex for assitance
+    //TODO:boolKeyValidator needs code to examine key against valid keys. Look to regex for assitance
     boolKeyValidator: function () { },
     intMatches : 0,
     // TODO:change this to account for duplicate keys in word using arrKeysToMatch.length
@@ -51,11 +51,11 @@ var objGame = {
             }
         else {
             this.arrKeysPlayed.push(this.strSelectedKey);
-            if (this.arrKeysToMatch[this.strSelectedKey]) {
+            if (this.objKeysToMatch[this.strSelectedKey]) {
                 //create intMatches
                 this.intMatches++
                 //TODO: add code to position keys onto playboard
-        
+                this.placeKeyMatch(this.strSelectredKey);
                 if (this.intMatches === this.intMatchWin) {
                     //TODO: code to indicate win to player and end game
                 }
@@ -64,10 +64,12 @@ var objGame = {
                 //add selected key to list of missed matches
                 this.arrNegMatches.push(this.strSelectedKey)
                 //code displaying updated unmatched keys needed
+                this.hangTheMan();
                 if (this.arrNegMatches.length === this.intMatchLose) {
                     //code to indicate loss and end game.
                 }
             }        
+        showPlayedKeys();
         }
     },
     setPlaceholders :  function(){
@@ -80,4 +82,31 @@ var objGame = {
             document.getElementById("wordPlacer").appendChild(newLi);
         }
     },
+    placeKeyMatch : function(strKeyMatch){
+        let arrPositions = this.objKeysToMatch[strKeyMatch];
+        for(i=0;i<arrPositions.length;i++){
+            let strKeyPos = arrPosition[i];
+            let eleLi = document.querySelector("#li" + strKeyPos );
+            let eleTxtNode = document.createTextNode(strKeyMatch);
+            eleLi.appendChild(eleTxtNode);
+        }
+
+    },
+    hangTheMan : function(){
+        var hangLevel = this.arrNegMatches.length + 1;
+        var hangProg = document.querySelector("#hangProgression");
+        hangProg.setAttribute("src","assets/images/Hangman-" + hangLevel + ".png");
+
+
+    
+    },
+    showPlayedKeys : function(){
+        var playedKeys = this.arrKeysPlayed.sort();
+        var keyList = ""
+        for(i=0;i<playedKeys;i++){
+            keyList + playedKeys[i] + " ,"
+        }
+        keyList = keyList.substr(0,keyList.length - 2);
+        document.querySelector("#letterList").textContent = keyList;
+    }
 }
