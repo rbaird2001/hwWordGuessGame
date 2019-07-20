@@ -6,8 +6,13 @@
                         "buf-l  rules   rules   buf-r"
                         "buf-l  return  return   buf-r"
                         "buf-l  play    play    buf-r"; 
-    grid-template-rows: 1fr 1fr 3fr 1fr;
+    grid-template-rows: 1fr 60px 1fr 1fr;
     grid-template-columns: 20px 1fr 1fr 20px;
+}
+
+#gameboard{
+    background-image: url(../images/coen-brothers-retro.jpg);
+    background-size: contain;
 }
 
 #gameboard > .title{
@@ -50,4 +55,9 @@
     background-color: #fff;
     border-style: none;
     list-style: none;
+}
+
+.bg-play{
+    background-color: antiquewhite;
+    opacity: .9;
 }

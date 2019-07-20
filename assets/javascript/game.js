@@ -33,7 +33,6 @@ var objGame = {
     },
     //TODO:REMOVE TEST LIST FROM list of keys played
     arrKeysPlayed : [],
-    //TODO:This will need to pickup the value of the event.key
     //TODO:boolKeyValidator needs code to examine key against valid keys. Look to regex for assitance
     boolKeyValidator: function () { },
     intMatches : 0,
