@@ -19,10 +19,15 @@
         <section id="gameboard">
             <div class="buffer-l"></div>
             <div class="title">Hangman</div>
-            <div class="rules">Rules</div>
+            <div class="rules">Rules
+                <div class="container border border-color-primary">
+                        <input type="text" name="keyPress" id="keyPress" onkeyup="objGame.testScript">
+                </div>
+            </div>
             <div class="playResults">results
                 <div id=playedLetters class="border border-color-secondary w-25 h-50">
-                    <p id=letterList>alpha omega</p>
+                    <p id=letterList></p>
+                    <p id="score">Wins / Losses</p>
                 </div>
                 <div id="hangImg" class="border border-color-primary w-50 h-50">
                     <img id=hangProgression src="assets/images/Hangman-0.png" alt="" data-progvalue="0">
