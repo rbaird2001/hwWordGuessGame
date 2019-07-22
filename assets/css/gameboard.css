@@ -43,7 +43,7 @@
     flex-direction: row;
     padding: .75rem 1.25rem;
     margin-bottom: -1px;
-    background-color: #fff;
+    background-color: transparent;
     border-style: none;
 }
 
@@ -57,7 +57,25 @@
     list-style: none;
 }
 
+#introImg{
+    height: 98%;
+    width: 98%;
+}
+
 .bg-play{
     background-color: antiquewhite;
     opacity: .97;
+}
+
+.my-hidden{
+    display: none;
+}
+
+#btnStart{
+    margin-right: 5%;
+}
+
+#hangProgression{
+    width: 75%;
+    height: 75%;
 }

@@ -5,7 +5,7 @@
 var objGame = {
     //function to load wordlist needed
     //list of words to play
-    arrWordList: ["buster", "jeffery", "barton", "delbert", "llewyn", "mattie", "ulysses", "chad", "edwina", "walter", "anton", "marge", "norville", "harry", "rooster", "penny", "donny", "llewelyn", "cowboy"],
+    arrWordList: ["buster", "jeffery", "barton", "delmar", "llewyn", "mattie", "ulysses", "chad", "edwina", "walter", "anton", "marge", "norville", "harry", "rooster", "penny", "donny", "llewelyn", "cowboy"],
     //use a random function to select a word 
     get strWordChoice() {
         if (!this._wordChoice) {
@@ -121,15 +121,23 @@ var objGame = {
         if (win) {
             this.intWon++
             // var eleNotHungMan = document.querySelector("#hangProgression");
-            this.hangProg.setAttribute("src", "assets/images/BusterScruggsCowboyFirstTime.png");
+            this.hangProg.setAttribute("src", "assets/images/BurnAfterReadingChadDance.png");
             // eleNotHungMan.setAttribute("data-image-status","lostGame");
         }
         else {
             this.intLost++
             //document.querySelector("#hangProgression");
-            this.hangProg.setAttribute("src", "assets/images/BusterScruggsCowboyFirstTime.png");
+            this.hangProg.setAttribute("src", "assets/images/BusterScruggsCowboyFirstTime2.png");
             this.strWordChoice;
             this.hangProg.setAttribute("data-image-status", "endGame");
+            let remPlacers = document.getElementById("wordPlacer");
+            remPlacers.innerHTML = '';
+            let newLi = document.createElement("li");
+            let placeholder = document.createTextNode(this.strWordChoice);
+            newLi.appendChild(placeholder);
+            newLi.setAttribute("class", "letterPlacer");
+            newLi.setAttribute("id", "li99");
+            document.getElementById("wordPlacer").appendChild(newLi);
         }
         this.scoreboard();
         document.removeEventListener("keyup", this.keyListener);
@@ -137,7 +145,8 @@ var objGame = {
         this.hangProg.addEventListener("click", this.clickListener);
     },
     scoreboard: function () {
-        document.querySelector("#score").textContent = "Wins: " + this.intWon + "  //  " + "Losses: " + this.intLost;
+        document.querySelector("#won").textContent = "Won: " + this.intWon;
+        document.querySelector("#lost").textContent = "Lost: " + this.intLost;
     },
     resetGame: function () {
         //code to clear out and restart new game.
@@ -154,6 +163,7 @@ var objGame = {
         this.initGame();
     },
     initGame: function () {
+        document.querySelector("#introduction").setAttribute("class","my-hidden")
         this.addKeysToMatch();
         this.setPlaceholders();
         this.keyListener = this.playTheKey.bind(this);
@@ -163,6 +173,10 @@ var objGame = {
     },
     regexChk : RegExp("^[a-z]{1}$"),
     keyListener: null,
-    clickListener: null
+    clickListener: null,
+    introduction : function(){
+        this.clickListener = this.initGame.bind(this);
+        document.querySelector("#btnStart").addEventListener("click", this.clickListener)
+    }
 }
-objGame.initGame();
+objGame.introduction();

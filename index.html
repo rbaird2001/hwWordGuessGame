@@ -19,31 +19,41 @@
         <!-- setup the layout of the gameboard -->
         <section id="gameboard">
             <div class="buffer-l"></div>
-            <div class="title">Hangman
+            <div id="introduction" class="justify-content-center title bg-play m-2 p-2">
+                <img src="assets/images/coenBrothersFilmIntro.png" id="introImg" alt="">
+                <!-- <p>Play Hangman with the Dude and other iconic characters from the Coen Brothers filmography.</p>
+                <p>Guess the first names, with only a few nicknames.</p>
+                <p>Lower case letter only. No numbers or other symbols.</p>
+                <p>Six wrong guesses to hang - not hard if you know your Coen Brothers films.</p>
+                <p>Press start button and begin typing your guesses.</p> -->
+                <div class="d-flex justify-content-center"> 
+                    <button id="btnStart" class="bg-danger">Start</button>
+                </div> 
             </div>
 
             <div class="rules d-flex mt-4">
-                <div class="w-25 h-10 justify-content-center bg-play">
-                    <p class="text-center mt-2">Played Letters</p>
+                <div class="w-25 h-13 justify-content-center bg-play">
+                    <p class="text-center mt-0">Played Letters</p>
                 </div>
                 <div class="w-50 h-10"></div>
-                <div class="w-25 h-10 justify-content-center bg-play">
-                    <p class="text-center mt-2">Scoreboard</p>
+                <div class="w-25 h-13 justify-content-center bg-play">
+                    <p class="text-center mt-0">Scoreboard</p>
                 </div>
             </div>
             <div class="playResults d-flex align-items-start bg-play">
-                <div id=playedLetters class="border border-dark w-25 h-25 p-1">
+                <div id=playedLetters class="w-25 h-25 p-1">
                     <p id=letterList></p>
                 </div>
                 <div id="hangImg" class="border border-dark w-50 h-100">
                     <img id=hangProgression src="assets/images/Hangman-0.png" data-image-status="initGame" alt="" data-progvalue="0">
                     <div class="d-flex justify-content-center">
-                        <ul id="wordPlacer" class="align-items-end mt-5"></ul>
+                        <ul id="wordPlacer"></ul>
                     </div>
 
                 </div>
-                <div id="winloss" class="border border-dark w-25 h-25 p-1">
-                    <p id="score"></p>
+                <div id="winloss" class="w-25 h-25 p-1">
+                    <p id="won">Won:</p>
+                    <p id="lost">Lost:</p>
                 </div>
             </div>
             <div class="wordPlay"></div>
