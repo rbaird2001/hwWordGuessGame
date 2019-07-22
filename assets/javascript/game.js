@@ -5,13 +5,22 @@
 var objGame = {
     //function to load wordlist needed
     //list of words to play
-    arrWordList: ["buster", "jeffery", "barton", "delmar", "llewyn", "mattie", "ulysses", "chad", "edwina", "walter", "anton", "marge", "norville", "harry", "rooster", "penny", "donny", "llewelyn", "cowboy"],
+    //arrWordList: ["buster", "jeffery", "barton", "delmar", "llewyn", "mattie", "ulysses", "chad", "edwina", "walter", "anton", "marge", "norville", "rooster", "penny", "donny", "llewelyn", "cowboy", "jerry", "verna"],
     //use a random function to select a word 
-    get strWordChoice() {
+    // get strWordChoice() {
+    //     if (!this._wordChoice) {
+    //         this._wordChoice = this.arrWordList[Math.floor(Math.random() * this.arrWordList.length)];
+    //     }
+    //     return this._wordChoice
+    // },
+    strwordchoice: function (obj) {
         if (!this._wordChoice) {
-            this._wordChoice = this.arrWordList[Math.floor(Math.random() * this.arrWordList.length)];
+            let keys = Object.keys(obj)
+            let strPreChoice = obj[keys[keys.length * Math.random() << 0]];
+            strPreChoice = strPreChoice.substr(0,strPreChoice.length - 4);
+            this._wordChoice = strPreChoice;
         }
-        return this._wordChoice
+        return this._wordChoice;
     },
     _wordChoice: "",
     //object of letters in selected work and their positions
@@ -19,9 +28,10 @@ var objGame = {
     objKeysToMatch: {},
     //function that populates the objKeysToMach object
     addKeysToMatch: function () {
-        var choice = this.strWordChoice;
+        //var choice = this.strWordChoice;
+        let choice = this.strwordchoice(this.objNameImage);
         for (i = 0; i < choice.length; i++) {
-            var strLetter = choice[i];
+            let strLetter = choice[i];
             if (this.objKeysToMatch[strLetter]) {
                 this.objKeysToMatch[strLetter].push(i);
             }
@@ -32,8 +42,6 @@ var objGame = {
     },
     //TODO:REMOVE TEST LIST FROM list of keys played
     arrKeysPlayed: [],
-    //TODO:boolKeyValidator needs code to examine key against valid keys. Look to regex for assitance
-    boolKeyValidator: function () { },
     intMatches: 0,
     // TODO:change this to account for duplicate keys in word using arrKeysToMatch.length
     get intMatchWin() {
@@ -49,7 +57,7 @@ var objGame = {
     //function that plays each selected letter against the chosen word.
     playTheKey: function (event) {
         var k = event.key;
-        if(!this.regexChk.test(k)){
+        if (!this.regexChk.test(k)) {
             alert("invalid key");
             return;
         }
@@ -83,14 +91,23 @@ var objGame = {
             }
         }
     },
+    buildPlacer : function(liNum,text){
+        let newLi = document.createElement("li");
+        let placeholder = document.createTextNode(text);
+        newLi.appendChild(placeholder);
+        newLi.setAttribute("class", "letterPlacer");
+        newLi.setAttribute("id", "li" + liNum);
+        document.getElementById("wordPlacer").appendChild(newLi);
+    },
     setPlaceholders: function () {
-        for (i = 0; i < this.strWordChoice.length; i++) {
-            var newLi = document.createElement("li");
-            var placeholder = document.createTextNode("__");
-            newLi.appendChild(placeholder);
-            newLi.setAttribute("class", "letterPlacer");
-            newLi.setAttribute("id", "li" + i);
-            document.getElementById("wordPlacer").appendChild(newLi);
+        for (i = 0; i < this.strwordchoice().length; i++) {
+            this.buildPlacer(i,"__");
+            // var newLi = document.createElement("li");
+            // var placeholder = document.createTextNode("__");
+            // newLi.appendChild(placeholder);
+            // newLi.setAttribute("class", "letterPlacer");
+            // newLi.setAttribute("id", "li" + i);
+            // document.getElementById("wordPlacer").appendChild(newLi);
         }
     },
     placeKeyMatch: function (strKeyMatch) {
@@ -103,6 +120,7 @@ var objGame = {
 
     },
     hangProg: document.querySelector("#hangProgression"),
+    winLose : document.querySelector("#winLose"),
     hangTheMan: function () {
         var hangLevel = this.intNegMatches;
         //var hangProg = document.querySelector("#hangProgression");
@@ -118,31 +136,39 @@ var objGame = {
         document.querySelector("#letterList").textContent = keyList;
     },
     endGame: function (win) {
+        let hp = this.hangProg;
+        let wl = this.winLose;
+        let imgPath = "assets/images/nameimages/";
+        let endImg = imgPath + this.objNameImage[this.strwordchoice()];
+        hp.setAttribute("src", endImg);
+        hp.setAttribute("data-image-status", "endGame");
         if (win) {
             this.intWon++
+            wl.className = "bg-success visible text-center w-50";
+            wl.textContent = "You won!  --  Click image to play again.";
             // var eleNotHungMan = document.querySelector("#hangProgression");
-            this.hangProg.setAttribute("src", "assets/images/BurnAfterReadingChadDance.png");
             // eleNotHungMan.setAttribute("data-image-status","lostGame");
         }
         else {
             this.intLost++
+            this.clearPlacers();
+            this.buildPlacer("99",this.strwordchoice());
+            wl.className = "bg-danger visible text-center w-50";
+            wl.textContent = "You lost  --  Click image to play again.";
             //document.querySelector("#hangProgression");
-            this.hangProg.setAttribute("src", "assets/images/BusterScruggsCowboyFirstTime2.png");
-            this.strWordChoice;
-            this.hangProg.setAttribute("data-image-status", "endGame");
-            let remPlacers = document.getElementById("wordPlacer");
-            remPlacers.innerHTML = '';
-            let newLi = document.createElement("li");
-            let placeholder = document.createTextNode(this.strWordChoice);
-            newLi.appendChild(placeholder);
-            newLi.setAttribute("class", "letterPlacer");
-            newLi.setAttribute("id", "li99");
-            document.getElementById("wordPlacer").appendChild(newLi);
+            // let remPlacers = document.getElementById("wordPlacer");
+            // remPlacers.innerHTML = '';
+            // let newLi = document.createElement("li");
+            // let placeholder = document.createTextNode(this.strWordChoice);
+            // newLi.appendChild(placeholder);
+            // newLi.setAttribute("class", "letterPlacer");
+            // newLi.setAttribute("id", "li99");
+            // document.getElementById("wordPlacer").appendChild(newLi);
         }
         this.scoreboard();
         document.removeEventListener("keyup", this.keyListener);
         this.clickListener = this.resetGame.bind(this);
-        this.hangProg.addEventListener("click", this.clickListener);
+        hp.addEventListener("click", this.clickListener);
     },
     scoreboard: function () {
         document.querySelector("#won").textContent = "Won: " + this.intWon;
@@ -150,20 +176,25 @@ var objGame = {
     },
     resetGame: function () {
         //code to clear out and restart new game.
+        let hp = this.hangProg;
+        let wl = this.winLose
         this.objKeysToMatch = {};
         this._wordChoice = "";
         this.arrKeysPlayed = []
         this.intNegMatches = 0;
         this.intMatches = 0
-        document.querySelector("#letterList").textContent = ""
-        let remPlacers = document.getElementById("wordPlacer");
-        remPlacers.innerHTML = '';
-        this.hangProg.setAttribute("src", "assets/images/Hangman-0.png");
-        this.hangProg.removeEventListener("click", this.clickListener);        
+        document.querySelector("#letterList").textContent = "";
+        this.clearPlacers();
+        // let remPlacers = document.getElementById("wordPlacer");
+        // remPlacers.innerHTML = '';
+        hp.setAttribute("src", "assets/images/Hangman-0.png");
+        hp.removeEventListener("click", this.clickListener);
+        wl.className = "w-50 invisible";
+        wl.textContent = "";
         this.initGame();
     },
     initGame: function () {
-        document.querySelector("#introduction").setAttribute("class","my-hidden")
+        document.querySelector("#introduction").setAttribute("class", "my-hidden")
         this.addKeysToMatch();
         this.setPlaceholders();
         this.keyListener = this.playTheKey.bind(this);
@@ -171,12 +202,39 @@ var objGame = {
 
 
     },
-    regexChk : RegExp("^[a-z]{1}$"),
+    regexChk: RegExp("^[a-z]{1}$"),
     keyListener: null,
     clickListener: null,
-    introduction : function(){
+    introduction: function () {
         this.clickListener = this.initGame.bind(this);
         document.querySelector("#btnStart").addEventListener("click", this.clickListener)
-    }
+    },
+    clearPlacers (){
+        let remPlacers = document.getElementById("wordPlacer");
+        remPlacers.innerHTML = '';
+
+    },
+    objNameImage: {
+        buster: "buster.png",
+        jeffery: "jeffery.png",
+        barton: "barton.png",
+        delmar: "delmar.png",
+        llewyn: "llewyn.png",
+        mattie: "mattie.png",
+        ulysses: "ulysses.png",
+        chad: "chad.png",
+        edwina: "edwina.png",
+        walter: "walter.png",
+        anton: "anton.png",
+        marge: "marge.png",
+        norville: "norville.png",
+        rooster: "rooster.png",
+        penny: "penny.png",
+        donny: "donny.png",
+        llewelyn: "llewelyn.png",
+        cowboy: "cowboy.png",
+        jerry: "jerry.png",
+        verna: "verna.png"
+    },
 }
 objGame.introduction();
