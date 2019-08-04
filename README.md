@@ -22,7 +22,6 @@ All code is tested against Chrome and Firefox's latest versions. No tests have b
 
 ## Built With
 * Microsoft VS Code.
-* JQuery: https://jquery.com/
 * Bootstrap 4:  https://getbootstrap.com/
 
 ## Contributing
